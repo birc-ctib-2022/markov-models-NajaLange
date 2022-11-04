@@ -1,7 +1,8 @@
 """Markov models."""
 
 
-import numpy as np
+#import numpy as np
+import math
 
 
 class MarkovModel:
@@ -24,6 +25,7 @@ class MarkovModel:
         self.trans = trans
 
 
+
 def likelihood(x: list[int], mm: MarkovModel) -> float:
     """
     Compute the likelihood of mm given x.
@@ -31,4 +33,25 @@ def likelihood(x: list[int], mm: MarkovModel) -> float:
     This is the same as the probability of x given mm,
     i.e., P(x ; mm).
     """
-    ...  # FIXME: implement this
+    for i in range(len(x)): 
+        if i == 0: 
+            prob = mm.init_probs[x[i]]
+        else: 
+            prob = prob * mm.trans[x[i-1]][x[i]]
+    return prob
+
+
+def likelihood_log(x: list[int], mm: MarkovModel) -> float:
+    """
+    Compute the likelihood of mm given x.
+
+    This is the same as the probability of x given mm,
+    i.e., P(x ; mm).
+    """
+    for i in range(len(x)): 
+        if i == 0: 
+            prob = math.log(mm.init_probs[x[i]])
+        else: 
+            prob = prob * math.log(mm.trans[x[i-1]][x[i]])
+    return prob
+
